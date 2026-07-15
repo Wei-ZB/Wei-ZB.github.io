@@ -1,0 +1,15 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "push changes",
+			"type": "shell",
+			"command": "cd /d C:\\Users\\wsj01\\weizibo-site && git add -A && git commit -m \"Simplify: remove external CDN, use system fonts and inline icons\" && git push origin master",
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "none"
+		}
+	]
+}
