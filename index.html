@@ -7,18 +7,59 @@
   <meta name="description" content="魏子博 (Wei Zibo) — USTC School of Physical Sciences, major in Atomic, Molecular and Optical Physics.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&family=Noto+Sans+SC:wght@300..700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&family=Noto+Sans+SC:wght@300..700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
+    /* ========== Reset & Variables ========== */
     :root {
       --bg: #FAFBFC;
+      --bg-alt: #F0F2F5;
       --fg: #1D2023;
+      --fg-secondary: #4B5563;
       --muted: #6B7280;
       --accent: #2563EB;
-      --accent-light: #DBEAFE;
+      --accent-hover: #1D4ED8;
+      --accent-light: rgba(37,99,235,0.10);
       --border: #E5E7EB;
-      --card: #FFFFFF;
-      --max-w: 760px;
-      --radius: 12px;
+      --card: rgba(255,255,255,0.75);
+      --card-border: rgba(255,255,255,0.40);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 20px rgba(0,0,0,0.06);
+      --shadow-lg: 0 8px 40px rgba(0,0,0,0.08);
+      --max-w: 780px;
+      --radius: 14px;
+      --radius-sm: 8px;
+      --nav-blur: rgba(250,251,252,0.82);
+      --hero-from: #2563EB;
+      --hero-to: #7C3AED;
+      --hero-overlay: rgba(255,255,255,0.92);
+      --tag-bg: rgba(37,99,235,0.08);
+      --tag-fg: #2563EB;
+      --footer-bg: #F8F9FA;
+      --transition: 0.30s cubic-bezier(0.4,0,0.2,1);
+    }
+    [data-theme="dark"] {
+      --bg: #0F1117;
+      --bg-alt: #1A1D27;
+      --fg: #EDEDEE;
+      --fg-secondary: #9CA3AF;
+      --muted: #6B7280;
+      --accent: #60A5FA;
+      --accent-hover: #93BBFD;
+      --accent-light: rgba(96,165,250,0.12);
+      --border: #2A2D3A;
+      --card: rgba(30,33,48,0.75);
+      --card-border: rgba(255,255,255,0.06);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.20);
+      --shadow-md: 0 4px 20px rgba(0,0,0,0.30);
+      --shadow-lg: 0 8px 40px rgba(0,0,0,0.40);
+      --nav-blur: rgba(15,17,23,0.85);
+      --hero-from: #3B82F6;
+      --hero-to: #8B5CF6;
+      --hero-overlay: rgba(15,17,23,0.85);
+      --tag-bg: rgba(96,165,250,0.12);
+      --tag-fg: #60A5FA;
+      --footer-bg: #0D0F15;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -28,116 +69,259 @@
       color: var(--fg);
       line-height: 1.7;
       -webkit-font-smoothing: antialiased;
+      transition: background var(--transition), color var(--transition);
     }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
+    a { color: var(--accent); text-decoration: none; transition: color .15s; }
+    a:hover { color: var(--accent-hover); }
     img { max-width: 100%; height: auto; display: block; }
+    ::selection { background: var(--accent); color: #fff; }
 
-    /* Nav */
+    /* ========== Scroll Animations ========== */
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* ========== Nav ========== */
     nav {
-      position: sticky; top: 0; z-index: 50;
-      background: rgba(250,251,252,0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--nav-blur);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
+      transition: background var(--transition), border-color var(--transition);
     }
     nav .inner {
       max-width: var(--max-w); margin: 0 auto;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 24px; height: 56px;
+      padding: 0 24px; height: 60px;
     }
-    nav .logo { font-weight: 600; font-size: 1rem; }
-    nav ul { display: flex; gap: 20px; list-style: none; }
+    nav .logo {
+      font-weight: 700; font-size: 1.05rem;
+      background: linear-gradient(135deg, var(--hero-from), var(--hero-to));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    nav ul { display: flex; gap: 24px; list-style: none; align-items: center; }
     nav ul a {
       font-size: 0.875rem; color: var(--muted);
-      transition: color .15s;
+      transition: color .15s; position: relative;
     }
     nav ul a:hover { color: var(--fg); text-decoration: none; }
+    nav ul a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 2px; background: var(--accent); border-radius: 2px;
+      transform: scaleX(0); transition: transform .2s;
+    }
+    nav ul a:hover::after { transform: scaleX(1); }
 
-    /* Main */
-    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+    /* Theme Toggle */
+    .theme-toggle {
+      background: none; border: 1px solid var(--border); border-radius: 50%;
+      width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--muted); font-size: 0.9rem;
+      transition: all .2s; background: var(--card);
+    }
+    .theme-toggle:hover { color: var(--fg); border-color: var(--accent); }
 
-    /* Hero */
+    /* ========== Hero ========== */
     .hero {
-      padding: 80px 0 56px;
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
       text-align: center;
+      position: relative;
+      overflow: hidden;
+      padding: 100px 24px 80px;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background: linear-gradient(135deg, var(--hero-from), var(--hero-to));
+      opacity: 0.06;
+    }
+    .hero-bg::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, var(--hero-from) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 50%, var(--hero-to) 0%, transparent 60%);
+      opacity: 0.5;
+    }
+    .hero::after {
+      content: ''; position: absolute; inset: 0; z-index: 1;
+      background: var(--hero-overlay);
+      transition: background var(--transition);
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 600px; }
+    .hero-avatar {
+      width: 100px; height: 100px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--hero-from), var(--hero-to));
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 2.4rem; font-weight: 700; color: #fff;
+      box-shadow: 0 8px 32px rgba(37,99,235,0.25);
+      animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
     }
     .hero h1 {
-      font-size: 2.5rem;
+      font-size: 2.8rem;
       font-weight: 700;
-      letter-spacing: -0.02em;
-      line-height: 1.25;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .hero h1 .gradient-text {
+      background: linear-gradient(135deg, var(--hero-from), var(--hero-to));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     .hero .sub {
-      margin-top: 12px;
-      font-size: 1.125rem;
-      color: var(--muted);
+      font-size: 1.1rem;
+      color: var(--fg-secondary);
+      margin-bottom: 8px;
     }
     .hero .tagline {
-      margin-top: 20px;
       font-size: 0.95rem;
       color: var(--muted);
-      max-width: 540px;
-      margin-left: auto;
-      margin-right: auto;
+      max-width: 480px;
+      margin: 0 auto 28px;
+    }
+    .hero-socials {
+      display: flex; gap: 14px; justify-content: center;
+    }
+    .hero-socials a {
+      width: 42px; height: 42px; border-radius: 50%;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); font-size: 1.1rem;
+      transition: all .25s; background: var(--card);
+    }
+    .hero-socials a:hover {
+      color: var(--accent); border-color: var(--accent);
+      transform: translateY(-3px); box-shadow: 0 4px 12px var(--accent-light);
+    }
+    .scroll-indicator {
+      position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+      z-index: 2; color: var(--muted); font-size: 1.2rem;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(6px); }
     }
 
-    /* Section */
-    section { padding: 56px 0; }
+    /* ========== Layout ========== */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+
+    /* ========== Sections ========== */
+    section { padding: 72px 0; }
     section h2 {
-      font-size: 1.25rem;
+      font-size: 1.3rem;
       font-weight: 600;
-      margin-bottom: 24px;
-      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 28px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    section h2 .icon-circle {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--accent-light);
+      color: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem;
     }
     section h2::after {
       content: '';
       flex: 1; height: 1px;
-      background: var(--border);
+      background: linear-gradient(to right, var(--border), transparent);
     }
 
-    /* Cards */
+    /* ========== Cards ========== */
     .card {
       background: var(--card);
-      border: 1px solid var(--border);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-radius: var(--radius);
-      padding: 20px 24px;
-      margin-bottom: 12px;
+      padding: 24px 28px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition);
+    }
+    .card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--accent-light);
     }
     .card:last-child { margin-bottom: 0; }
 
-    /* Education */
-    .edu-item { display: flex; gap: 16px; align-items: flex-start; }
+    /* ========== Education Timeline ========== */
+    .edu-timeline { position: relative; padding-left: 28px; }
+    .edu-timeline::before {
+      content: ''; position: absolute; left: 8px; top: 10px; bottom: 10px;
+      width: 2px; background: linear-gradient(to bottom, var(--accent), var(--border));
+      border-radius: 2px;
+    }
+    .edu-item {
+      position: relative; padding-bottom: 24px;
+    }
+    .edu-item:last-child { padding-bottom: 0; }
     .edu-dot {
-      width: 10px; height: 10px; border-radius: 50%;
+      position: absolute; left: -24px; top: 6px;
+      width: 14px; height: 14px; border-radius: 50%;
       background: var(--accent);
-      margin-top: 9px; flex-shrink: 0;
+      border: 3px solid var(--bg);
+      box-shadow: 0 0 0 2px var(--accent);
     }
-    .edu-line {
-      border-left: 2px solid var(--border);
-      margin-left: 4px;
-      padding-left: 22px;
-      padding-bottom: 16px;
+    .edu-dot-secondary {
+      background: var(--muted);
+      box-shadow: 0 0 0 2px var(--muted);
     }
-    .edu-line:last-child { padding-bottom: 0; border-left-color: transparent; }
-    .edu-date { font-size: 0.8rem; color: var(--muted); }
-    .edu-place { font-weight: 500; }
+    .edu-place { font-weight: 600; font-size: 1rem; }
+    .edu-major { font-size: 0.9rem; color: var(--fg-secondary); }
+    .edu-date {
+      font-size: 0.8rem; color: var(--muted);
+      display: inline-flex; align-items: center; gap: 4px;
+      margin-top: 2px;
+    }
 
-    /* Honors */
+    /* ========== Tags ========== */
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .tag {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      background: var(--tag-bg);
+      color: var(--tag-fg);
+      transition: all .2s;
+    }
+    .tag:hover { transform: translateY(-1px); }
+
+    /* ========== Honors ========== */
     .honor-item {
-      display: flex; gap: 12px; padding: 6px 0;
+      display: flex; gap: 14px; padding: 8px 0;
+      align-items: flex-start;
     }
     .honor-year {
       flex-shrink: 0;
-      width: 48px;
+      width: 52px;
       font-size: 0.8rem;
       font-weight: 600;
       color: var(--accent);
-      padding-top: 2px;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: var(--accent-light);
+      text-align: center;
     }
     .honor-desc { font-size: 0.925rem; }
 
-    /* Projects */
+    /* ========== Projects ========== */
     .project-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -145,14 +329,25 @@
     }
     .project-card {
       background: var(--card);
-      border: 1px solid var(--border);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-radius: var(--radius);
-      padding: 20px;
-      transition: box-shadow .2s, transform .15s;
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+      transition: all .25s;
     }
     .project-card:hover {
-      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-4px);
+      border-color: var(--accent-light);
+    }
+    .project-card .project-icon {
+      width: 36px; height: 36px; border-radius: var(--radius-sm);
+      background: var(--accent-light);
+      color: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; margin-bottom: 12px;
     }
     .project-card h3 {
       font-size: 0.95rem;
@@ -164,28 +359,68 @@
       color: var(--muted);
       line-height: 1.5;
     }
-
-    /* Footer */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 32px 0;
-      text-align: center;
-      font-size: 0.825rem;
-      color: var(--muted);
+    .project-card .project-link {
+      margin-top: 10px; display: inline-block;
+      font-size: 0.8rem; font-weight: 500;
     }
 
-    /* Mobile */
+    /* ========== Back to Top ========== */
+    .back-to-top {
+      position: fixed; bottom: 28px; right: 28px; z-index: 99;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--accent); color: #fff; border: none;
+      font-size: 1.1rem; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(37,99,235,0.30);
+      transition: all .3s; opacity: 0; transform: translateY(20px);
+      pointer-events: none;
+    }
+    .back-to-top.show {
+      opacity: 1; transform: translateY(0);
+      pointer-events: auto;
+    }
+    .back-to-top:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 24px rgba(37,99,235,0.40);
+    }
+
+    /* ========== Footer ========== */
+    footer {
+      border-top: 1px solid var(--border);
+      background: var(--footer-bg);
+      padding: 40px 0 32px;
+      text-align: center;
+      transition: background var(--transition), border-color var(--transition);
+    }
+    footer p { font-size: 0.825rem; color: var(--muted); }
+    footer .footer-links {
+      display: flex; justify-content: center; gap: 16px;
+      margin-bottom: 12px;
+    }
+    footer .footer-links a {
+      color: var(--muted); font-size: 0.9rem;
+    }
+    footer .footer-links a:hover { color: var(--accent); }
+
+    /* ========== Mobile ========== */
     @media (max-width: 640px) {
-      .hero { padding: 48px 0 32px; }
-      .hero h1 { font-size: 1.75rem; }
-      nav ul { gap: 12px; }
-      nav ul a { font-size: 0.8rem; }
+      nav .inner { padding: 0 16px; height: 54px; }
+      nav ul { gap: 14px; }
+      nav ul a { font-size: 0.78rem; }
+      .hero { padding: 80px 16px 60px; min-height: 90vh; }
+      .hero h1 { font-size: 2rem; }
+      .hero-avatar { width: 80px; height: 80px; font-size: 1.8rem; }
+      section { padding: 48px 0; }
+      section h2 { font-size: 1.1rem; }
+      .card { padding: 18px 20px; }
       .project-grid { grid-template-columns: 1fr; }
+      .back-to-top { bottom: 16px; right: 16px; width: 38px; height: 38px; font-size: 0.9rem; }
+      .honor-year { width: 44px; font-size: 0.75rem; }
     }
   </style>
 </head>
 <body>
 
+<!-- ========== Navigation ========== -->
 <nav>
   <div class="inner">
     <span class="logo">WZ</span>
@@ -195,27 +430,178 @@
       <li><a href="#honors">Honors</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#teaching">Teaching</a></li>
+      <li><button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button></li>
     </ul>
   </div>
 </nav>
 
-<div class="hero">
-  <h1>魏子博<br>Wei Zibo</h1>
-  <p class="sub">原子分子物理 · 中国科学技术大学</p>
-  <p class="tagline">Atomic, Molecular and Optical Physics · School of Physical Sciences, USTC</p>
-</div>
+<!-- ========== Hero ========== -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-avatar">WZ</div>
+    <h1><span class="gradient-text">魏子博</span><br>Wei Zibo</h1>
+    <p class="sub">原子分子物理 · 中国科学技术大学</p>
+    <p class="tagline">Atomic, Molecular and Optical Physics · School of Physical Sciences, USTC</p>
+    <div class="hero-socials">
+      <a href="mailto:weizibo@ustc.edu.cn" aria-label="Email" title="Email"><i class="fas fa-envelope"></i></a>
+      <a href="https://github.com/Wei-ZB" target="_blank" aria-label="GitHub" title="GitHub"><i class="fab fa-github"></i></a>
+      <a href="#" aria-label="ResearchGate" title="ResearchGate"><i class="fab fa-researchgate"></i></a>
+    </div>
+  </div>
+  <div class="scroll-indicator"><i class="fas fa-chevron-down"></i></div>
+</section>
 
+<!-- ========== Main Content ========== -->
 <div class="container">
 
   <!-- About -->
   <section id="about">
-    <h2>About</h2>
-    <div class="card">
+    <h2><span class="icon-circle"><i class="fas fa-user"></i></span>About</h2>
+    <div class="card reveal">
       <p>I am a Grade-3 undergraduate student at the <a href="https://physics.ustc.edu.cn" target="_blank">School of Physical Sciences</a> of <a href="https://www.ustc.edu.cn/" target="_blank">University of Science and Technology of China</a> (USTC), Hefei, majoring in <strong>Atomic, Molecular and Optical Physics</strong>.</p>
+      <div class="tags">
+        <span class="tag">Atomic Physics</span>
+        <span class="tag">Molecular Physics</span>
+        <span class="tag">Optics</span>
+        <span class="tag">Quantum Mechanics</span>
+        <span class="tag">IYPT / CUPT</span>
+      </div>
     </div>
   </section>
 
   <!-- Education -->
+  <section id="education">
+    <h2><span class="icon-circle"><i class="fas fa-graduation-cap"></i></span>Education</h2>
+    <div class="card reveal">
+      <div class="edu-timeline">
+        <div class="edu-item">
+          <div class="edu-dot"></div>
+          <div>
+            <div class="edu-place">University of Science and Technology of China (USTC)</div>
+            <div class="edu-major">B.S. in Atomic, Molecular and Optical Physics (Expected 2027)</div>
+            <div class="edu-date"><i class="far fa-calendar-alt"></i> 2023/08 – present · Hefei</div>
+          </div>
+        </div>
+        <div class="edu-item">
+          <div class="edu-dot edu-dot-secondary"></div>
+          <div>
+            <div class="edu-place">Erdos No.1 High School</div>
+            <div class="edu-date"><i class="far fa-calendar-alt"></i> 2020/08 – 2023/06 · Ordos, Inner Mongolia</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Honors -->
+  <section id="honors">
+    <h2><span class="icon-circle"><i class="fas fa-trophy"></i></span>Honors &amp; Awards</h2>
+    <div class="card reveal">
+      <div class="honor-item"><span class="honor-year">2025</span><span class="honor-desc">🥇 Golden Award, USTC Outstanding Student Scholarship</span></div>
+      <div class="honor-item"><span class="honor-year">2024</span><span class="honor-desc">🏆 First Prize, 15th China Undergraduate Physics Tournament (CUPT)</span></div>
+      <div class="honor-item"><span class="honor-year">2024</span><span class="honor-desc">🎖️ Zhang Zongzhi Science and Technology Scholarship</span></div>
+      <div class="honor-item"><span class="honor-year">2024</span><span class="honor-desc">📝 First Prize, Competition of Electromagnetism Essay in USTC</span></div>
+      <div class="honor-item"><span class="honor-year">2023</span><span class="honor-desc">🥈 Silver Award, USTC Outstanding Student Scholarship</span></div>
+      <div class="honor-item"><span class="honor-year">2022</span><span class="honor-desc">🥉 Bronze Medal, 39th Chinese Physics Olympiad (CPhO)</span></div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects">
+    <h2><span class="icon-circle"><i class="fas fa-flask"></i></span>Projects</h2>
+    <p style="color:var(--muted);margin-bottom:20px;font-size:0.9rem">
+      Seminar, Essay and IYPT / CUPT.
+    </p>
+    <div class="project-grid">
+      <div class="project-card reveal reveal-delay-1">
+        <div class="project-icon"><i class="fas fa-bolt"></i></div>
+        <h3>Electromagnetism Essay in USTC</h3>
+        <p>IYPT 2024 related. Files available via cloud storage.</p>
+        <a href="https://wwrv.lanzouu.com/idB8H33sqxti" target="_blank" class="project-link">Download →</a>
+      </div>
+      <div class="project-card reveal reveal-delay-2">
+        <div class="project-icon"><i class="fas fa-book"></i></div>
+        <h3>Option Essay in USTC</h3>
+        <p>Related essay project for USTC physics coursework.</p>
+      </div>
+      <div class="project-card reveal reveal-delay-3">
+        <div class="project-icon"><i class="fas fa-magnet"></i></div>
+        <h3>Magnetic Assist (IYPT 2025)</h3>
+        <p>IYPT 2025 project — magnetic assist problem investigation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Teaching -->
+  <section id="teaching">
+    <h2><span class="icon-circle"><i class="fas fa-chalkboard-teacher"></i></span>Teaching</h2>
+    <div class="card reveal">
+      <p>College Physics – Base Experimentation A, 2026 Spring</p>
+    </div>
+  </section>
+
+</div>
+
+<!-- ========== Back to Top ========== -->
+<button class="back-to-top" id="backToTop" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+
+<!-- ========== Footer ========== -->
+<footer>
+  <div class="container">
+    <div class="footer-links">
+      <a href="mailto:weizibo@ustc.edu.cn"><i class="fas fa-envelope"></i></a>
+      <a href="https://github.com/Wei-ZB" target="_blank"><i class="fab fa-github"></i></a>
+      <a href="#"><i class="fab fa-researchgate"></i></a>
+    </div>
+    <p>&copy; 2026 魏子博 / Wei Zibo · Built with <i class="fas fa-heart" style="color:var(--accent)"></i> for GitHub Pages</p>
+  </div>
+</footer>
+
+<!-- ========== Scripts ========== -->
+<script>
+  // === Theme Toggle ===
+  const toggle = document.getElementById('themeToggle');
+  const icon = toggle.querySelector('i');
+  const saved = localStorage.getItem('theme') ||
+    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', saved);
+  icon.className = saved === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+
+  toggle.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    icon.className = next === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+  });
+
+  // === Scroll Reveal ===
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.10, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // === Back to Top ===
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 500) btn.classList.add('show');
+    else btn.classList.remove('show');
+  });
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>
+
+
   <section id="education">
     <h2>Education</h2>
     <div class="card">
