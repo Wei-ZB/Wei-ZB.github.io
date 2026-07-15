@@ -5,12 +5,434 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>魏子博 / Wei Zibo</title>
   <meta name="description" content="魏子博 (Wei Zibo) — USTC School of Physical Sciences, major in Atomic, Molecular and Optical Physics.">
-  <link href="https://fonts.loli.net/css2?family=Inter:opsz,wght@14..32,300..700&family=Noto+Sans+SC:wght@300..700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
-    /* ========== Reset & Variables ========== */
+    /* ========================================================
+       CSS Reset & Variables — zero external dependencies
+    ======================================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     :root {
-      --bg: #FAFBFC;
+      --bg: #f5f7fa;
+      --bg-card: #ffffff;
+      --fg: #1a1a2e;
+      --fg-muted: #5a6785;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --accent-bg: rgba(37,99,235,0.08);
+      --border: #e2e6ee;
+      --shadow: 0 2px 12px rgba(0,0,0,0.06);
+      --radius: 10px;
+      --max-w: 720px;
+      --header-bg: rgba(245,247,250,0.92);
+      --gradient-1: #2563eb;
+      --gradient-2: #7c3aed;
+      --footer-bg: #edf0f5;
+      --toggle-bg: #e2e6ee;
+    }
+    [data-theme="dark"] {
+      --bg: #0d1117;
+      --bg-card: #161b22;
+      --fg: #e6edf3;
+      --fg-muted: #8b949e;
+      --accent: #58a6ff;
+      --accent-hover: #79c0ff;
+      --accent-bg: rgba(88,166,255,0.10);
+      --border: #30363d;
+      --shadow: 0 2px 12px rgba(0,0,0,0.30);
+      --header-bg: rgba(13,17,23,0.92);
+      --gradient-1: #58a6ff;
+      --gradient-2: #a855f7;
+      --footer-bg: #0d1117;
+      --toggle-bg: #30363d;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      transition: background .3s, color .3s;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); }
+
+    /* ==================== HEADER ==================== */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--header-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    header .inner {
+      max-width: var(--max-w); margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 20px; height: 56px;
+    }
+    header .logo {
+      font-weight: 700; font-size: 1.05rem;
+      background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    header nav { display: flex; gap: 10px; align-items: center; }
+    header nav a {
+      font-size: 0.84rem; color: var(--fg-muted);
+      padding: 4px 0; position: relative;
+    }
+    header nav a::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 2px; background: var(--accent); border-radius: 2px;
+      transform: scaleX(0); transition: transform .2s;
+    }
+    header nav a:hover { color: var(--fg); text-decoration: none; }
+    header nav a:hover::after { transform: scaleX(1); }
+
+    /* Theme Toggle */
+    .theme-btn {
+      background: var(--toggle-bg); border: none; border-radius: 50%;
+      width: 34px; height: 34px; cursor: pointer; font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s; color: var(--fg-muted);
+    }
+    .theme-btn:hover { background: var(--border); color: var(--fg); }
+
+    /* ==================== HERO ==================== */
+    .hero {
+      text-align: center; padding: 60px 20px 40px;
+      position: relative; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+      opacity: 0.05; z-index: 0;
+    }
+    .hero-content { position: relative; z-index: 1; }
+    .hero-avatar {
+      width: 92px; height: 92px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px; font-size: 2rem; font-weight: 700; color: #fff;
+      box-shadow: 0 6px 24px rgba(37,99,235,0.25);
+      animation: heroFloat 5s ease-in-out infinite;
+    }
+    @keyframes heroFloat {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .hero h1 {
+      font-size: 2.5rem; font-weight: 700;
+      letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 8px;
+    }
+    .hero h1 .gradient-text {
+      background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p { color: var(--fg-muted); margin-bottom: 4px; }
+    .hero .social-links { margin-top: 18px; display: flex; gap: 12px; justify-content: center; }
+    .hero .social-links a {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--border); display: flex;
+      align-items: center; justify-content: center;
+      color: var(--fg-muted); font-size: 1rem;
+      transition: all .2s;
+    }
+    .hero .social-links a:hover {
+      background: var(--accent-bg); color: var(--accent);
+      border-color: var(--accent); transform: translateY(-2px);
+    }
+
+    /* ==================== MAIN CONTENT ==================== */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 20px; }
+    section { padding: 48px 0; }
+
+    section h2 {
+      font-size: 1.2rem; font-weight: 600; margin-bottom: 20px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    section h2::after {
+      content: ''; flex: 1; height: 1px;
+      background: var(--border);
+    }
+
+    .card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px 24px;
+      margin-bottom: 12px; box-shadow: var(--shadow);
+      transition: background .3s, border-color .3s, box-shadow .3s;
+    }
+    .card:last-child { margin-bottom: 0; }
+
+    /* Education Timeline */
+    .edu-item { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 16px; }
+    .edu-item:last-child { margin-bottom: 0; }
+    .edu-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--accent); flex-shrink: 0;
+      margin-top: 7px; position: relative;
+    }
+    .edu-dot::after {
+      content: ''; position: absolute; top: 12px; left: 4px;
+      height: 100%; width: 2px; background: var(--border);
+    }
+    .edu-item:last-child .edu-dot::after { display: none; }
+    .edu-place { font-weight: 600; }
+    .edu-major { font-size: 0.9rem; color: var(--fg-muted); }
+    .edu-date { font-size: 0.8rem; color: var(--fg-muted); display: flex; gap: 4px; margin-top: 2px; }
+
+    /* Tags */
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .tag {
+      padding: 3px 12px; border-radius: 20px; font-size: 0.8rem;
+      background: var(--accent-bg); color: var(--accent);
+    }
+
+    /* Honors */
+    .honor-item { display: flex; gap: 12px; padding: 6px 0; }
+    .honor-year {
+      flex-shrink: 0; width: 48px; font-size: 0.8rem; font-weight: 600;
+      background: var(--accent-bg); color: var(--accent);
+      border-radius: 6px; text-align: center; padding: 2px 4px;
+    }
+    .honor-desc { font-size: 0.93rem; }
+
+    /* Projects */
+    .project-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+      gap: 14px;
+    }
+    .project-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .project-card:hover {
+      transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+    .project-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 6px; }
+    .project-card p { font-size: 0.83rem; color: var(--fg-muted); }
+    .project-card .proj-link { display: inline-block; margin-top: 8px; font-size: 0.84rem; font-weight: 500; }
+
+    /* ==================== FOOTER ==================== */
+    footer {
+      border-top: 1px solid var(--border); background: var(--footer-bg);
+      padding: 32px 0; text-align: center;
+    }
+    footer p { font-size: 0.82rem; color: var(--fg-muted); }
+    footer .footer-links { display: flex; justify-content: center; gap: 14px; margin-bottom: 10px; }
+    footer .footer-links a { color: var(--fg-muted); font-size: 0.9rem; }
+
+    /* Back to Top */
+    .back-top {
+      position: fixed; bottom: 24px; right: 24px; z-index: 99;
+      width: 42px; height: 42px; border-radius: 50%;
+      background: var(--accent); color: #fff; border: none;
+      font-size: 1rem; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      transition: all .3s; opacity: 0; transform: translateY(20px);
+      pointer-events: none;
+    }
+    .back-top.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+    /* ==================== RESPONSIVE ==================== */
+    @media (max-width: 640px) {
+      .hero { padding: 40px 16px 32px; }
+      .hero h1 { font-size: 1.8rem; }
+      .hero-avatar { width: 76px; height: 76px; font-size: 1.5rem; }
+      section { padding: 36px 0; }
+      section h2 { font-size: 1.1rem; }
+      .card { padding: 16px 18px; }
+      .project-grid { grid-template-columns: 1fr; }
+      header nav a { font-size: 0.78rem; }
+      header nav { gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============== HEADER ============== -->
+<header>
+  <div class="inner">
+    <span class="logo">WZ</span>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#education">Education</a>
+      <a href="#honors">Honors</a>
+      <a href="#projects">Projects</a>
+      <a href="#teaching">Teaching</a>
+      <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">🌙</button>
+    </nav>
+  </div>
+</header>
+
+<!-- ============== HERO ============== -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-avatar">WZ</div>
+    <h1><span class="gradient-text">魏子博</span><br>Wei Zibo</h1>
+    <p>原子分子物理 · 中国科学技术大学</p>
+    <p>Atomic, Molecular and Optical Physics · School of Physical Sciences, USTC</p>
+    <div class="social-links">
+      <a href="mailto:weizibo@ustc.edu.cn" aria-label="Email">✉</a>
+      <a href="https://github.com/Wei-ZB" target="_blank" aria-label="GitHub">◆</a>
+      <a href="#" aria-label="ResearchGate">R</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============== MAIN ============== -->
+<div class="container">
+
+  <!-- About -->
+  <section id="about">
+    <h2>About</h2>
+    <div class="card">
+      <p>I am a Grade-3 undergraduate student at the <a href="https://physics.ustc.edu.cn" target="_blank">School of Physical Sciences</a> of <a href="https://www.ustc.edu.cn/" target="_blank">University of Science and Technology of China</a> (USTC), Hefei, majoring in <strong>Atomic, Molecular and Optical Physics</strong>.</p>
+      <div class="tags">
+        <span class="tag">Atomic Physics</span>
+        <span class="tag">Molecular Physics</span>
+        <span class="tag">Optics</span>
+        <span class="tag">Quantum Mechanics</span>
+        <span class="tag">IYPT / CUPT</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Education -->
+  <section id="education">
+    <h2>Education</h2>
+    <div class="card">
+      <div class="edu-item">
+        <div class="edu-dot"></div>
+        <div>
+          <div class="edu-place">University of Science and Technology of China (USTC)</div>
+          <div class="edu-major">B.S. in Atomic, Molecular and Optical Physics (Expected 2027)</div>
+          <div class="edu-date">📅 2023/08 – present · Hefei</div>
+        </div>
+      </div>
+      <div class="edu-item">
+        <div class="edu-dot" style="background:var(--fg-muted)"></div>
+        <div>
+          <div class="edu-place">Erdos No.1 High School</div>
+          <div class="edu-date">📅 2020/08 – 2023/06 · Ordos, Inner Mongolia</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Honors -->
+  <section id="honors">
+    <h2>Honors &amp; Awards</h2>
+    <div class="card">
+      <div class="honor-item"><span class="honor-year">2025</span><span class="honor-desc">🥇 Golden Award, USTC Outstanding Student Scholarship</span></div>
+      <div class="honor-item"><span class="honor-year">2024</span><span class="honor-desc">🏆 First Prize, 15th China Undergraduate Physics Tournament (CUPT)</span></div>
+      <div class="honor-item"><span class="honor-year">2024</span><span class="honor-desc">🎖️ Zhang Zongzhi Science and Technology Scholarship</span></div>
+      <div class="honor-item"><span class="honor-year">2024</span><span class="honor-desc">📝 First Prize, Competition of Electromagnetism Essay in USTC</span></div>
+      <div class="honor-item"><span class="honor-year">2023</span><span class="honor-desc">🥈 Silver Award, USTC Outstanding Student Scholarship</span></div>
+      <div class="honor-item"><span class="honor-year">2022</span><span class="honor-desc">🥉 Bronze Medal, 39th Chinese Physics Olympiad (CPhO)</span></div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects">
+    <h2>Projects</h2>
+    <p style="color:var(--fg-muted);margin-bottom:16px;font-size:0.9rem">Seminar, Essay and IYPT / CUPT.</p>
+    <div class="project-grid">
+      <div class="project-card">
+        <h3>Electromagnetism Essay in USTC</h3>
+        <p>IYPT 2024 related. Files available via cloud storage.</p>
+        <a href="https://wwrv.lanzouu.com/idB8H33sqxti" target="_blank" class="proj-link">Download →</a>
+      </div>
+      <div class="project-card">
+        <h3>Option Essay in USTC</h3>
+        <p>Related essay project for USTC physics coursework.</p>
+      </div>
+      <div class="project-card">
+        <h3>Magnetic Assist (IYPT 2025)</h3>
+        <p>IYPT 2025 project — magnetic assist problem investigation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Teaching -->
+  <section id="teaching">
+    <h2>Teaching</h2>
+    <div class="card">
+      <p>College Physics – Base Experimentation A, 2026 Spring</p>
+    </div>
+  </section>
+
+</div>
+
+<!-- ============== BACK TO TOP ============== -->
+<button class="back-top" id="backTop">↑</button>
+
+<!-- ============== FOOTER ============== -->
+<footer>
+  <div class="container">
+    <div class="footer-links">
+      <a href="mailto:weizibo@ustc.edu.cn">✉</a>
+      <a href="https://github.com/Wei-ZB" target="_blank">◆</a>
+      <a href="#">R</a>
+    </div>
+    <p>© 2026 魏子博 / Wei Zibo · Built with ❤ for GitHub Pages</p>
+  </div>
+</footer>
+
+<!-- ============== SCRIPTS ============== -->
+<script>
+(function(){
+  // Theme toggle
+  var btn = document.getElementById('themeBtn');
+  var saved = localStorage.getItem('theme');
+  if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    btn.textContent = '☀';
+  } else {
+    document.documentElement.setAttribute('data-theme', 'light');
+    btn.textContent = '🌙';
+  }
+  btn.addEventListener('click', function(){
+    var d = document.documentElement;
+    var cur = d.getAttribute('data-theme');
+    var next = cur === 'dark' ? 'light' : 'dark';
+    d.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    btn.textContent = next === 'dark' ? '☀' : '🌙';
+  });
+
+  // Back to top
+  var topBtn = document.getElementById('backTop');
+  window.addEventListener('scroll', function(){
+    if (window.scrollY > 500) { topBtn.classList.add('show'); }
+    else { topBtn.classList.remove('show'); }
+  });
+  topBtn.addEventListener('click', function(){
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // Scroll reveal (simple observer)
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+        entry.target.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.card').forEach(function(el){
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    observer.observe(el);
+  });
+})();
+</script>
+</body>
+</html>
       --bg-alt: #F0F2F5;
       --fg: #1D2023;
       --fg-secondary: #4B5563;
